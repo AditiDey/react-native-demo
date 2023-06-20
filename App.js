@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import * as Google from 'expo-auth-session/providers/google';
 import { View, Text, Button, Image, TextInput } from 'react-native';
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+const HomeScreen = ({ navigation }) => {
   const [token, setToken] = useState("");
   const [user, setUser] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [loginSuccessful, setLoginSuccessful] = useState(false);
-  const [showMorePage, setShowMorePage] = useState(false); // Track if the "For More" page should be shown
+  const [showMorePage, setShowMorePage] = useState(false);
 
   const [request, response, promptAsync] = Google.useAuthRequest(
     {
@@ -40,9 +43,9 @@ export default function App() {
 
       const user = await response.json();
       setUser(user);
-      setLoginSuccessful(true); // Set loginSuccessful to true after successful login
+      setLoginSuccessful(true);
     } catch (error) {
-      // Add your own error handler here
+
     }
   };
 
@@ -56,7 +59,8 @@ export default function App() {
 
   const handleLogout = () => {
     setUser(null);
-    setLoginSuccessful(false); // Set loginSuccessful to false on logout
+    setLoginSuccessful(false);
+    navigation.navigate('Arthmate'); 
   };
 
   const handleLearnMore = () => {
@@ -64,11 +68,11 @@ export default function App() {
   };
 
   const handleRedirect = () => {
-    setShowMorePage(true); // Show the "For More" page
+    setShowMorePage(true);
   };
 
   const handleBack = () => {
-    setShowMorePage(false); // Go back to the initial page
+    setShowMorePage(false);
   };
 
   return (
@@ -78,7 +82,7 @@ export default function App() {
       </Text>
       {user ? (
         <View style={{ marginTop: 30 }}>
-          {loginSuccessful && !showMorePage ? ( // Show the login successful message only on the initial page
+          {loginSuccessful && !showMorePage ? (
             <Text>
               Login is successful!
             </Text>
@@ -113,7 +117,7 @@ export default function App() {
           )}
 
           <TextInput
-            value={JSON.stringify(user)} // Convert user object to string for display
+            value={JSON.stringify(user)}
             multiline
             editable={false}
             style={{ borderWidth: 1, borderColor: 'blue', marginTop: 20, padding: 20 }}
@@ -125,5 +129,16 @@ export default function App() {
       )}
     </View>
   );
-}
+};
 
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;

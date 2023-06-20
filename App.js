@@ -21,6 +21,7 @@ const HomeScreen = ({ navigation }) => {
       clientId: '276714645070-pnr5010p7pu4aagn1mluv7ns248j1iih.apps.googleusercontent.com',
       androidClientId: '276714645070-ptnh1ldhjehhp4fna2v8o6c9subu6hgi.apps.googleusercontent.com',
       scopes: ['openid', 'profile', 'email'],
+      prompt: 'consent',
     },
     { authorizationEndpoint: 'https://accounts.google.com/o/oauth2/v2/auth' }
   );
@@ -95,7 +96,7 @@ const HomeScreen = ({ navigation }) => {
                 editable={false}
                 style={{ borderWidth: 1, borderColor: 'blue', marginTop: 20, padding: 20 }}
               />
-              <Button title="Back" onPress={handleBack} style={{ marginTop: 20 }} />
+              <Button title="Back" onPress={handleBack} style={{ marginTop: 40 }} />
             </View>
           ) : (
             <View style={{ alignItems: 'center', marginTop: 20, padding: 50 }}>
@@ -106,13 +107,16 @@ const HomeScreen = ({ navigation }) => {
                 style={{ width: 400, height: 200 }}
                 resizeMode="contain"
               />
+             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 60 }}>
               <Button
-                title={loginSuccessful ? "For more" : "Learn More"}
-                onPress={loginSuccessful ? handleRedirect : handleLearnMore}
-              />
-              {loginSuccessful ? (
-                <Button title="Learn More" onPress={handleLearnMore} />
-              ) : null}
+                 title={loginSuccessful ? "For more" : "Learn More"}
+               onPress={loginSuccessful ? handleRedirect : handleLearnMore}
+               />
+            {loginSuccessful ? (
+            <Button title="Learn More" onPress={handleLearnMore} />
+           ) : null}
+          </View>
+
             </View>
           )}
 
